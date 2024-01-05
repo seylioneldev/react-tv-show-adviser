@@ -3,30 +3,33 @@ import { TVShowAPI } from "./api/tv-show";
 import "./global.css";
 import style from "./style.module.css";
 import { BACKDROP_BASE_URL } from "./config";
-
-
-TVShowAPI.fetchPopulars()
+import { TVShowDetail } from "./components/TVShowDetail/TVShowDetail";
 
 export function App() {
+  const [currentTVShow, setCurrentTVShow] = useState();
 
-
-  const [currentTVShow, setCurrentTVShow] = useState()
-
-  async function  fetchPopulars(){
-    const populars = await TVShowAPI.fetchPopulars()
-    if (populars.length>0) {
-        setCurrentTVShow(populars[0])
+  async function fetchPopulars() {
+    const populars = await TVShowAPI.fetchPopulars();
+    if (populars.length > 0) {
+      setCurrentTVShow(populars[0]);
     }
   }
 
-  useEffect(()=>{
-    fetchPopulars()
-  },[])
+  useEffect(() => {
+    fetchPopulars();
+  }, []);
 
-  console.log('Works Fine !', currentTVShow);
+  console.log("Works Fine !", currentTVShow);
 
   return (
-    <div className={style.main_container} style={{background: currentTVShow ? `linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)), url("${BACKDROP_BASE_URL}${currentTVShow.backdrop_path} ") no-repeat center / cover` : "black"}}>
+    <div
+      className={style.main_container}
+      style={{
+        background: currentTVShow
+          ? `linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)), url("${BACKDROP_BASE_URL}${currentTVShow.backdrop_path} ") no-repeat center / cover`
+          : "black",
+      }}
+    >
       <div className={style.header}>
         <div className="row">
           <div className="col-4">
@@ -34,11 +37,13 @@ export function App() {
             <div>Subtitle</div>
           </div>
           <div className="col-sm-12 col-md-4 ">
-            <input style={{width:"100%"}} type="text" />
+            <input style={{ width: "100%" }} type="text" />
           </div>
         </div>
       </div>
-      <div className={style.tv_show_detail}>detail</div>
+      <div className={style.tv_show_detail}>
+        {currentTVShow && <TVShowDetail tvShow={currentTVShow}></TVShowDetail>}
+      </div>
       <div className={style.recommandations}>recommandations</div>
     </div>
   );
